@@ -6,7 +6,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 function Nav() {
     const location = useLocation();
     const navigate = useNavigate();
-    const [selected, setSelected] = useState(location.pathname);
+    const tmpUrl = '/' + location.pathname.split('/')[1];
+    const [selected, setSelected] = useState(tmpUrl !== '/edit' ? location.pathname :
+        '/manage/' + location.pathname.split('/')[2]);
+    const newNav = nav.filter(item => item.url !== '/edit');
     const CustomBtn = (props) => {
         const { id, name, icon, url } = props;
         const color1 = url === selected ?
@@ -66,7 +69,7 @@ function Nav() {
                 textAlign={'left'}>
                 MENU
             </Typography>
-            {nav.map((item, index) => (
+            {newNav.map((item, index) => (
                 <Container key={index}>
                     <CustomBtn name={item.name} id={item.id} icon={item.icon} url={item.url} />
                     <Box width={'90%'} height={'1px'} bgcolor={'rgb(213,219,225)    '} />

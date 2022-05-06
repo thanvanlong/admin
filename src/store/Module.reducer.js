@@ -1,7 +1,8 @@
 import { SET_USER } from "./Module.action";
 
 const initState = {
-    listUser: [],
+    listUsers: [],
+    listOrder: [],
 }
 
 export const adminReducer = (state = initState, action) =>{
@@ -9,7 +10,9 @@ export const adminReducer = (state = initState, action) =>{
         case SET_USER:
             return {
                 ...state,
-                listUser: action.payload
+                listUsers: action.payload
             }
+        default: 
+            return state;
     }
 }

@@ -17,11 +17,13 @@ import { useLocation, useParams } from 'react-router-dom';
 import AdmniContainer from '../service/AdminContainer.service';
 import { useDispatch } from 'react-redux'
 import { setUser } from '../store/Module.action';
+import ConnectSocket from '../socket/ConnectSocket';
 function ManagePage() {
     const roles = ['Admin', 'Client', 'Cooker', 'Waiter'];
     const service = new AdmniContainer();
     const [value, setValue] = useState(roles[0]);
     const [open, setOpen] = useState();
+    // const socket = new ConnectSocket();
     const handleChange = (e) => {
         setValue(e.target.value);
     }
@@ -30,7 +32,7 @@ function ManagePage() {
     const param = useParams();
     const callAPI = useCallback(async () => {
         setOpen(true);
-        await service.getAll('users').then(res => {
+        await service.get('users').then(res => {
             dispatch(setUser(res.data));
             tmp.current = res.data;
         });
@@ -38,6 +40,7 @@ function ManagePage() {
     }, [])
     useEffect(() => {
         callAPI();
+        // socket.register();
     }, [])
     return (
         <Box sx={{

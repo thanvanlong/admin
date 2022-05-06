@@ -4,7 +4,8 @@ import { useLocation } from 'react-router-dom'
 import {nav} from '../utils/fakeData'
 function NavChild() {
     const location = useLocation();
-    const url = '/'+location.pathname.split('/')[1];
+    const tmpUrl = '/'+location.pathname.split('/')[1];
+    const url = tmpUrl === '/edit' ? tmpUrl : location.pathname;
     const data = nav.filter(item => item.url === url);
     return (
         <Box

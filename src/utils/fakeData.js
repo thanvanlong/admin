@@ -15,7 +15,7 @@ export const nav = [
     {
         id: 2,
         name: 'Nhân viên',
-        url: '/manage/user',
+        url: '/manage/users',
         icon: <EngineeringOutlinedIcon />
     },
     {

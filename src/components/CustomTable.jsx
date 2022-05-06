@@ -12,14 +12,12 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 function CustomTable(props) {
-  const {  config, fieldName, type } = props;
+  const { config, fieldName, type } = props;
   const [sort, setSort] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  // const rows = props?.rows;
   const temp = useSelector(state => state);
-  console.log(props);
-  const rows = temp?.listUser;
+  const rows = temp['list' + (type + '').charAt(0).toLocaleUpperCase() + type.slice(1)];
   const [data, setData] = useState(rows?.slice(rowsPerPage * page, rowsPerPage * (page + 1)));
   const navigate = useNavigate();
   const handleChangePage = (event, newPage) => {
@@ -46,16 +44,13 @@ function CustomTable(props) {
   }
   const handleEdit = (e) => {
     const row = rows.filter(item => item._id == e.currentTarget.id);
-    navigate('/edit/' + type + '/' + e.currentTarget.id,{
-      state:{
+    navigate('/edit/' + type + '/' + e.currentTarget.id, {
+      state: {
         data: row,
       }
     });
   }
   const handleDelete = () => {
-
-  }
-  const handleSelect = () => {
 
   }
   return (
@@ -72,7 +67,7 @@ function CustomTable(props) {
                 </Typography>
               </TableCell>
               {fieldName.map((item, index) => (
-                <TableCell>
+                <TableCell key={index}>
                   <Box display={'flex'}>
                     <Typography
                       fontFamily={'Roboto Slab'}
@@ -98,7 +93,12 @@ function CustomTable(props) {
           </TableHead>
           <TableBody sx={{ overflowY: 'auto' }}>
             {data.map((item, index) => (
-              <TableRow id={item._id} className={item._id} sx={{ cursor: 'pointer' }} onClick={handleSelect}>
+              <TableRow
+                key={index}
+                id={item._id}
+                className={item._id}
+                sx={{ cursor: 'pointer' }}
+                onClick={handleEdit}>
                 <TableCell>{index + 1}</TableCell>
                 {fieldName.map((it, index) => (
                   <TableCell key={index}>

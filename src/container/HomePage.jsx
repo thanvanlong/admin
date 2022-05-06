@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Bar, Line } from 'react-chartjs-2'
 import {
     Chart as ChartJS,
@@ -11,10 +11,14 @@ import {
     Legend,
     LineElement,
 } from 'chart.js';
-import { Box, Card, Container, Typography } from '@mui/material';
+import { Box, Card, Container, Typography, Button } from '@mui/material';
 import CardContent from '../components/CardContent';
 import { content } from '../utils/fakeData';
 import { useSelector } from 'react-redux';
+import CustomTable from '../components/CustomTable';
+import {fieldName} from '../config/table.config'
+import {editable} from '../config/attr-config-editable.config'
+import ConnectSocket from '../socket/ConnectSocket';
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -64,6 +68,10 @@ function HomePage() {
             },
         ]
     }
+    const socket = new ConnectSocket();
+    useEffect(() =>{
+        socket.register();
+    },[])
     return (
         <>
             <Box sx={{
@@ -123,6 +131,28 @@ function HomePage() {
                     <Line options={options} data={data} style={{ width: 500, height: 500 }} />
                 </Card>
             </Box>
+            <Card width={'100%'} sx={{ padding: 5 }} >
+                <Box sx={{
+                    width: 200,
+                    display: 'flex',
+                    justifyContent: 'space-around',
+                    alignItems: 'center',
+                    marginBottom: 2,
+                }}>
+                    <Box
+                        sx={{
+                            width: 3,
+                            height: 30,
+                            background: 'linear-gradient(180deg, rgba(1,227,167,1) 0%, rgba(9,9,121,1) 100%, rgba(40,0,128,1) 100%)'
+                        }} />
+                    <Typography fontFamily={'Roboto Slab'} fontWeight={900}>Đơn đặt đợi xử lý</Typography>
+                </Box>
+                <Box width={'100%'} height={'1px'} bgcolor={'rgb(213,219,225)'} />
+                <CustomTable
+                    config={editable}
+                    fieldName={fieldName.order}
+                    type={'order'} />
+            </Card>
         </>
     )
 }
