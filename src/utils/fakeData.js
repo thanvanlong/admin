@@ -9,11 +9,13 @@ export const nav = [
     {
         id: 1,
         name: 'Trang chủ',
+        url: '/',
         icon: <HomeOutlinedIcon />
     },
     {
         id: 2,
         name: 'Nhân viên',
+        url: '/manage/user',
         icon: <EngineeringOutlinedIcon />
     },
     {
@@ -35,6 +37,11 @@ export const nav = [
         id: 6,
         name: 'Đơn đặt',
         icon: <AccountBalanceWalletOutlinedIcon />
+    },
+    {
+        id: 7,
+        url: '/edit',
+        name: 'Chỉnh sửa'
     }
 ];
 
@@ -65,121 +72,136 @@ export const rows = [
     {
         name: faker.name.findName(),
         id: 1,
-        sex: 'male',
+        sex: 'Male',
         address: '66 Van Phuc Ha Dong',
         birth: new Date(2001,7,20).toDateString(),
         phone: '0335202836',
+        email: 'longthan366@gmail.com'
     },
     {
-        name: 'Than Van Long',
-        id: 1,
-        sex: 'male',
+        name: faker.name.findName(),
+        id: 2,
+        sex: 'Male',
         address: '66 Van Phuc Ha Dong',
         birth: new Date(2001,7,20).toDateString(),
         phone: '0335202836',
+        email: 'longthan366@gmail.com'
     },
     {
-        name: 'Than Van Long',
-        id: 1,
-        sex: 'male',
+        name: faker.name.findName(),
+        id: 3,
+        sex: 'Male',
         address: '66 Van Phuc Ha Dong',
         birth: new Date(2001,7,20).toDateString(),
         phone: '0335202836',
+        email: 'longthan366@gmail.com'
     },
     {
-        name: 'Than Van Long',
-        id: 1,
-        sex: 'male',
+        name: faker.name.findName(),
+        id: 4,
+        sex: 'Male',
         address: '66 Van Phuc Ha Dong',
         birth: new Date(2001,7,20).toDateString(),
         phone: '0335202836',
+        email: 'longthan366@gmail.com'
     },
     {
-        name: 'Than Van Long',
-        id: 1,
-        sex: 'male',
+        name: faker.name.findName(),
+        id: 5,
+        sex: 'Male',
         address: '66 Van Phuc Ha Dong',
         birth: new Date(2001,7,20).toDateString(),
         phone: '0335202836',
+        email: 'longthan366@gmail.com'
     },
     {
-        name: 'Than Van Long',
-        id: 1,
-        sex: 'male',
+        name: faker.name.findName(),
+        id: 6,
+        sex: 'Male',
         address: '66 Van Phuc Ha Dong',
         birth: new Date(2001,7,20).toDateString(),
         phone: '0335202836',
+        email: 'longthan366@gmail.com'
     },
     {
-        name: 'Than Van Long',
-        id: 1,
-        sex: 'male',
+        name: faker.name.findName(),
+        id: 7,
+        sex: 'Male',
         address: '66 Van Phuc Ha Dong',
         birth: new Date(2001,7,20).toDateString(),
         phone: '0335202836',
+        email: 'longthan366@gmail.com'
     },
     {
-        name: 'Than Van Long',
-        id: 1,
-        sex: 'male',
+        name: faker.name.findName(),
+        id: 8,
+        sex: 'Male',
         address: '66 Van Phuc Ha Dong',
         birth: new Date(2001,7,20).toDateString(),
         phone: '0335202836',
+        email: 'longthan366@gmail.com'
     },
     {
-        name: 'Than Van Long',
-        id: 1,
-        sex: 'male',
+        name: faker.name.findName(),
+        id: 9,
+        sex: 'Male',
         address: '66 Van Phuc Ha Dong',
         birth: new Date(2001,7,20).toDateString(),
         phone: '0335202836',
+        email: 'longthan366@gmail.com'
     },
     {
-        name: 'Than Van Long',
-        id: 1,
-        sex: 'male',
+        name: faker.name.findName(),
+        id: 10,
+        sex: 'Male',
         address: '66 Van Phuc Ha Dong',
         birth: new Date(2001,7,20).toDateString(),
         phone: '0335202836',
+        email: 'longthan366@gmail.com'
     },
     {
-        name: 'Than Van Long',
-        id: 1,
-        sex: 'male',
+        name: faker.name.findName(),
+        id: 11,
+        sex: 'Male',
         address: '66 Van Phuc Ha Dong',
         birth: new Date(2001,7,20).toDateString(),
         phone: '0335202836',
+        email: 'longthan366@gmail.com'
     },
     {
-        name: 'Than Van Long',
-        id: 1,
-        sex: 'male',
+        name: faker.name.findName(),
+        id: 12,
+        sex: 'Male',
         address: '66 Van Phuc Ha Dong',
         birth: new Date(2001,7,20).toDateString(),
         phone: '0335202836',
+        email: 'longthan366@gmail.com'
     },
     {
-        name: 'Than Van Long',
-        id: 1,
-        sex: 'male',
+        name: faker.name.findName(),
+        id: 13,
+        sex: 'Male',
         address: '66 Van Phuc Ha Dong',
         birth: new Date(2001,7,20).toDateString(),
         phone: '0335202836',
+        email: 'longthan366@gmail.com'
     },
     {
-        name: 'Than Van Long',
-        id: 1,
-        sex: 'male',
+        name: faker.name.findName(),
+        id: 14,
+        sex: 'Male',
         address: '66 Van Phuc Ha Dong',
         birth: new Date(2001,7,20).toDateString(),
         phone: '0335202836',
+        email: 'longthan366@gmail.com'
     },
     {
-        name: 'Than Van Long',
-        id: 1,
-        sex: 'male',
+        name: faker.name.findName(),
+        id: 15,
+        sex: 'Male',
         address: '66 Van Phuc Ha Dong',
         birth: new Date(2001,7,20).toDateString(),
         phone: '0335202836',
+        email: 'longthan366@gmail.com'
     }
 ]

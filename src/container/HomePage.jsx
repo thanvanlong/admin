@@ -14,6 +14,7 @@ import {
 import { Box, Card, Container, Typography } from '@mui/material';
 import CardContent from '../components/CardContent';
 import { content } from '../utils/fakeData';
+import { useSelector } from 'react-redux';
 ChartJS.register(
     CategoryScale,
     LinearScale,

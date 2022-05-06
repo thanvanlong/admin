@@ -1,6 +1,11 @@
 import React from 'react'
 import { Box, Card, Typography } from '@mui/material'
+import { useLocation } from 'react-router-dom'
+import {nav} from '../utils/fakeData'
 function NavChild() {
+    const location = useLocation();
+    const url = '/'+location.pathname.split('/')[1];
+    const data = nav.filter(item => item.url === url);
     return (
         <Box
             sx={{
@@ -13,7 +18,7 @@ function NavChild() {
                 display: 'flex',
                 alignItems: 'center',
                 paddingLeft: 3,
-                marginTop: 8,
+                marginTop: 9,
             }}>
             <Box
                 sx={{
@@ -25,7 +30,7 @@ function NavChild() {
             <Typography
                 fontFamily={'Roboto Slab'}
                 fontSize={20}
-                fontWeight={900}>Trang chủ</Typography>
+                fontWeight={900}>{data[0]?.name}</Typography>
         </Box>
     )
 }
