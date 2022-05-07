@@ -1,9 +1,6 @@
 import {
-    Card, Table, Box, MenuItem, TextField,
-    TableContainer, TableHead,
-    Typography, TableRow, TableCell,
-    TableBody, Button, IconButton,
-    TablePagination, Backdrop
+    Box, MenuItem, TextField, Typography,
+    Button, IconButton, Backdrop, Dialog
 } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -13,35 +10,55 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { fieldName } from '../config/table.config'
 import { editable } from '../config/attr-config-editable.config'
 import CustomTable from '../components/CustomTable';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import AdmniContainer from '../service/AdminContainer.service';
 import { useDispatch } from 'react-redux'
 import { setUser } from '../store/Module.action';
-import ConnectSocket from '../socket/ConnectSocket';
+import { configString, roleConfig } from '../config/admin.config';
 function ManagePage() {
-    const roles = ['Admin', 'Client', 'Cooker', 'Waiter'];
     const service = new AdmniContainer();
-    const [value, setValue] = useState(roles[0]);
     const [open, setOpen] = useState();
-    // const socket = new ConnectSocket();
+    const [dataSearch, setDataSearch] = useState({
+        id: '',
+        name: '',
+        role: '',
+    });
     const handleChange = (e) => {
-        setValue(e.target.value);
-    }
+        const name = e.target.name;
+        const value = e.target.value;
+        setDataSearch({ ...dataSearch, [name]: value })
+        setValue(value);
+    };
     const tmp = useRef();
     const dispatch = useDispatch();
     const param = useParams();
+    console.log(param);
+    const roles = roleConfig[param?.id];
+    const [value, setValue] = useState(roles[0]);
     const callAPI = useCallback(async () => {
         setOpen(true);
-        await service.get('users').then(res => {
+        await service.get(param?.id).then(res => {
             dispatch(setUser(res.data));
             tmp.current = res.data;
         });
         setOpen(false);
-    }, [])
+    }, []);
+    const handleDelete = async (data) => {
+        console.log(data);
+        await service.delete(param?.id + '/' + data).then(res => console.log(res));
+        // console.log(rs);
+    }
+    const handleSearch = () => {
+        const newData = tmp.current.filter(
+            item => (item.username + '').toLocaleLowerCase().includes(dataSearch.name) &&
+                (item._id + '').toLocaleLowerCase().includes(dataSearch.id) &&
+                (item.role + '').toLocaleLowerCase().includes(dataSearch.role)
+        );
+        console.log(newData);
+    }
     useEffect(() => {
         callAPI();
-        // socket.register();
-    }, [])
+    }, []);
     return (
         <Box sx={{
             paddingTop: 3,
@@ -81,22 +98,36 @@ function ManagePage() {
                     alignItems: 'center',
                     marginBlock: 3
                 }}>
-                <TextField sx={{ width: 270 }} size='small' label="ID" variant="outlined" />
-                <TextField sx={{ width: 270 }} size='small' label="Name" variant="outlined" />
+                <TextField
+                    sx={{ width: 270 }}
+                    size='small'
+                    label="ID"
+                    name='id'
+                    onChange={handleChange}
+                    variant="outlined" />
+                <TextField
+                    sx={{ width: 270 }}
+                    size='small'
+                    name='name'
+                    label="Name"
+                    onChange={handleChange}
+                    variant="outlined" />
                 <TextField
                     size='small'
                     sx={{ width: 270 }}
                     label="Role"
+                    name='role'
                     value={value}
                     onChange={handleChange}
                     select>
                     {roles.map((option) => (
                         <MenuItem key={option} value={option}>
-                            {option}
+                            {configString(option)}
                         </MenuItem>
                     ))}
                 </TextField>
                 <Button
+                    onClick={handleSearch}
                     sx={{
                         width: 270,
                         height: 53,
@@ -111,6 +142,7 @@ function ManagePage() {
                 config={editable}
                 fieldName={fieldName.engineer}
                 type={param?.id}
+                handleDelete={handleDelete}
             /> : <></>}
             <Backdrop
                 sx={{ color: '#fff', zIndex: 100 }}

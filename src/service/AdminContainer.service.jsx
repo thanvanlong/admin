@@ -22,5 +22,15 @@ class AdmniContainer extends Component{
         const rs = await axios.get(this.apiUrl + url);
         return rs;
     }
+
+    async delete(url, data){
+        const rs = await axios.delete(this.apiUrl + url, data);
+        return rs;
+    }
+
+    async create(url, data){
+        const rs = await axios.post(this.apiUrl + url, data);
+        return rs;
+    }
 }
 export default AdmniContainer;

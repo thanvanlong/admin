@@ -8,69 +8,90 @@ export const configString = (data) => {
 }
 
 export const roleConfig = {
-    1: 'Client',
-    2: 'Waiter',
-    3: 'Chef',
-    4: 'Admin'
+    users: ['client', 'waiter', 'admin', 'chef'],
 }
 
 export const configField = {
-    user: {
+    users: {
         gender: {
             type: 'select',
             data: ['male', 'female'],
             visiable: true,
+            create: true,
         },
         role: {
             type: 'select',
-            data: Object.values(roleConfig),
+            data: Object.values(roleConfig?.users),
             visiable: true,
+            create: true,
         },
         address: {
             type: 'text',
             visiable: true,
+            create: true,
         },
         isActive: {
             type: 'select',
             data: ['true', 'false'],
             visiable: true,
+            create: false,
         },
         isLock: {
             type: 'select',
             data: ['true', 'false'],
             visiable: true,
+            create: false,
         },
         username: {
             type: 'text',
             visiable: true,
+            create: true,
         },
         email: {
             type: 'email',
             visiable: false,
+            create: true,
         },
         password: {
             type: 'password',
             visiable: false,
+            create: true,
         },
         phone: {
             type: 'phone',
-            visiable: true,
+            visiable: false,
+            create: true,
         },
         createdAt: {
             type: 'date',
-            visiable: true,
+            visiable: false,
         },
         updatedAt: {
             type: 'date',
-            visiable: true,
+            visiable: false,
         }
-
-
-
     }
 }
 
 export const configDate = (data) =>{
     const tmpDate = (data +'').split('T');
     return tmpDate[0];
+}
+
+export const configOrderPending = (data) =>{
+    const createdat = data?.createdAt;
+    let food = '';
+    data?.dishes.map((item) =>{
+        food = food + item.name + '\n' ;
+    })
+    console.log(food);
+    let quantity = '';
+    data?.quantity.map((item) =>{
+        quantity = quantity + item + '\n';
+    })
+    let total ;
+    data?.dishes.map((item, index) =>{
+        total += data?.quantity.indexOf(index) * item.price;
+    });
+    console.log(total);
 }

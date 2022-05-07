@@ -7,6 +7,7 @@ import NavChild from './components/NavChild';
 import ManagePage from './container/ManagePage';
 import HomePage from './container/HomePage';
 import EditPage from './container/EditPage';
+import AddPage from './container/AddPage';
 function App() {
   return (
     <div className="App">
@@ -19,6 +20,9 @@ function App() {
             <Route path='/' element={<HomePage />} />
             <Route path='/manage'>
               <Route path=':id' element={<ManagePage />} />
+            </Route>
+            <Route path='/add'>
+              <Route path=':id' element={<AddPage />} />
             </Route>
             <Route path='/edit'>
               <Route path=':user'>

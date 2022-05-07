@@ -3,5 +3,5 @@ export const fieldName = {
     food: [],
     table: [],
     evnet: [],
-    order: ['Food', 'Quantity', 'Name', 'Address', 'Phone', 'Order At', 'Delivery At', 'Total'],
+    order: ['Food', 'Quantity', 'Name', 'Address', 'Phone', 'CreatedAt', 'TimeDelivery', 'Total'],
 }

@@ -7,47 +7,49 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { configField, configString, configDate } from '../config/admin.config'
 import AdmniContainer from '../service/AdminContainer.service'
 
-function EditPage() {
+function AddPage() {
     const param = useParams();
+    const type = param['id'];
+    const obj = configField[type];
+    const field = Object.keys(obj).filter(key => obj[key].create === true);
     const service = new AdmniContainer();
-    const type = Object.values(param).filter(item => item !== 'id')[0];
-    const [obj, setObj] = useState({});
     const [dt, setDt] = useState({});
     const [dialog, setDialog] = useState(false);
 
-    const rs = Object.keys(obj).map((key) => [key, obj[key]]);
-    const callAPI = useCallback(async () => {
-        setOpen(true);
-        await service.getById(type + '/' + param['id']).then(res => {
-            setObj(res.data);
-            const tt = Object.keys(res.data);
-            console.log(tt);
-            convertData(tt, res.data);
-        });
-        setOpen(false);
-    }, []);
-    const convertData = (data, obj) => {
+    // const rs = Object.keys(obj).map((key) => [key, obj[key]]);
+    // const callAPI = useCallback(async () => {
+    //     setOpen(true);
+    //     await service.getById(type + '/' + param['id']).then(res => {
+    //         setObj(res.data);
+    //         const tt = Object.keys(res.data);
+    //         console.log(tt);
+    //         convertData(tt, res.data);
+    //     });
+    //     setOpen(false);
+    // }, []);
+    const convertData = useCallback((data) => {
         let t = {};
         data.map((key) => {
-            t = { ...t, [key]: obj[key] };
+            t = { ...t, [key]: '' };
         })
         console.log(t);
         setDt(t);
-    }
+    },[])
     useEffect(() => {
-        callAPI();
+        convertData(field);
     }, []);
     const [open, setOpen] = useState(false);
-    const data = rs.filter(item => item[0] !== '_id' && item[0] !== '__v');
     const handleChange = (e) => {
         const name = e.target.name ? e.target.name : e.target.id;
         const value = e.target.value;
         setDt({ ...dt, [name]: value });
     };
-    console.log(dt);
     const handleSubmit = async () => {
         console.log(dt);
-        const rs = await service.update(type, dt);
+        setOpen(true);
+        const rs = await service.create(type, dt);
+        console.log(rs);
+        setOpen(false)
         setDialog(true);
     }
     return (
@@ -62,17 +64,17 @@ function EditPage() {
             paddingBlock: 3,
 
         }}>
-            {data.map((item, index) => {
+            {field.map((item, index) => {
                 const typeConfig = configField[type];
-                const tmp = typeConfig[item[0]];
+                const tmp = typeConfig[item];
                 return (
                     <DefaultInput
-                        id={item[0]}
-                        name={configString(item[0])}
-                        data={tmp?.type === 'date' ? configDate(item[1]) : configString(item[1])}
+                        id={item}
+                        name={configString(item)}
                         type={tmp?.type}
-                        disabled={tmp?.visiable}
+                        data={dt[item]}
                         dataSelect={tmp?.data}
+                        disabled={true}
                         key={index}
                         handleChange={handleChange}
                     />
@@ -136,4 +138,4 @@ function EditPage() {
     )
 }
 
-export default EditPage
+export default AddPage

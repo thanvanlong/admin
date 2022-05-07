@@ -14,11 +14,13 @@ import {
 import { Box, Card, Container, Typography, Button } from '@mui/material';
 import CardContent from '../components/CardContent';
 import { content } from '../utils/fakeData';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomTable from '../components/CustomTable';
-import {fieldName} from '../config/table.config'
-import {editable} from '../config/attr-config-editable.config'
-import ConnectSocket from '../socket/ConnectSocket';
+import { fieldName } from '../config/table.config'
+import { editable } from '../config/attr-config-editable.config'
+import { over } from 'stompjs'
+import SockJS from 'sockjs-client'
+import { setOrderPending } from '../store/Module.action';
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -68,10 +70,19 @@ function HomePage() {
             },
         ]
     }
-    const socket = new ConnectSocket();
-    useEffect(() =>{
-        socket.register();
-    },[])
+    const dispatch = useDispatch();
+    useEffect(() => {
+        const sockjs = new SockJS('https://wsocketlong.herokuapp.com/websocket')
+        let stompjs = over(sockjs);
+        stompjs.connect({}, () => {
+            stompjs.subscribe('/user/3/private', (payload) => {
+                const data = JSON.parse(payload.body)
+                dispatch(setOrderPending(data));
+            })
+        }, (e) => {
+            console.log(e);
+        });
+    }, []);
     return (
         <>
             <Box sx={{
@@ -151,7 +162,7 @@ function HomePage() {
                 <CustomTable
                     config={editable}
                     fieldName={fieldName.order}
-                    type={'order'} />
+                    type={'orders'} />
             </Card>
         </>
     )

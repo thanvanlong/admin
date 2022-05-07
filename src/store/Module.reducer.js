@@ -1,8 +1,8 @@
-import { SET_USER } from "./Module.action";
+import { SET_ORDER_PENDING, SET_USER,  } from "./Module.action";
 
 const initState = {
     listUsers: [],
-    listOrder: [],
+    listOrders: [],
 }
 
 export const adminReducer = (state = initState, action) =>{
@@ -11,6 +11,11 @@ export const adminReducer = (state = initState, action) =>{
             return {
                 ...state,
                 listUsers: action.payload
+            }
+        case SET_ORDER_PENDING: 
+            return {
+                ...state,
+                listOrders: [...state.listOrders, action.payload]
             }
         default: 
             return state;

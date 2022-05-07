@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
-  Card, Table, Box, MenuItem, TextField,
+  Card, Table, Box, MenuItem, Dialog,
   TableContainer, TableHead,
   Typography, TableRow, TableCell,
   TableBody, Button, IconButton,
@@ -11,14 +11,21 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { configOrderPending, configString } from '../config/admin.config'
 function CustomTable(props) {
-  const { config, fieldName, type } = props;
+  const { config, fieldName, type, handleDelete } = props;
   const [sort, setSort] = useState(false);
+  const [id, setId] = useState();
   const [page, setPage] = useState(0);
+  const [dialog, setDialog] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  // const [tmp, setTmp] = useState(useSelector(state => state));
+
   const temp = useSelector(state => state);
   const rows = temp['list' + (type + '').charAt(0).toLocaleUpperCase() + type.slice(1)];
-  const [data, setData] = useState(rows?.slice(rowsPerPage * page, rowsPerPage * (page + 1)));
+  const t = rows.slice(rowsPerPage * page, rowsPerPage * (page + 1));
+  const [data, setData] = useState(t);
   const navigate = useNavigate();
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -43,16 +50,17 @@ function CustomTable(props) {
     setSort(!sort)
   }
   const handleEdit = (e) => {
-    const row = rows.filter(item => item._id == e.currentTarget.id);
-    navigate('/edit/' + type + '/' + e.currentTarget.id, {
-      state: {
-        data: row,
-      }
-    });
+    navigate('/edit/' + type + '/' + e.currentTarget.id,);
   }
-  const handleDelete = () => {
-
+  const handleSubmit = () => {
+    const newData = data.filter(item => item._id !== id);
+    setData(newData);
+    //call api here
+    handleDelete(id);
+    setDialog(false);
   }
+  const tmp = data.length > 0 ? data : t;
+  // configOrderPending(tmp[0])
   return (
     <>
       <TableContainer>
@@ -92,50 +100,57 @@ function CustomTable(props) {
             </TableRow>
           </TableHead>
           <TableBody sx={{ overflowY: 'auto' }}>
-            {data.map((item, index) => (
-              <TableRow
-                key={index}
-                id={item._id}
-                className={item._id}
-                sx={{ cursor: 'pointer' }}
-                onClick={handleEdit}>
-                <TableCell>{index + 1}</TableCell>
-                {fieldName.map((it, index) => (
-                  <TableCell key={index}>
-                    <Typography fontFamily={'Roboto Slab'} fontWeight={900} >
-                      {item[(it + '').toLocaleLowerCase()]}
-                    </Typography>
+            {tmp.map((item, index) => {
+              return (
+                <TableRow
+                  key={index}
+                  id={item._id}
+                  className={item._id}
+                  sx={{ cursor: 'pointer' }}>
+                  <TableCell>{index + 1}</TableCell>
+                  {fieldName.map((it, index) => (
+                    <TableCell key={index} onClick={handleEdit} id={item._id}>
+                      <Typography fontFamily={'Roboto Slab'} fontWeight={900} >
+                        {configString(item[(it + '').toLocaleLowerCase()])}
+                      </Typography>
+                    </TableCell>
+                  ))}
+                  <TableCell>
+                    <Box display={'flex'}>
+                      <IconButton
+                        disabled={!config.btnEdit}
+                        onClick={handleEdit}
+                        id={item._id}
+                        sx={{
+                          width: 40,
+                          height: 40,
+                          backgroundColor: 'rgb(47,223,132)',
+                          color: 'white',
+                          marginInline: 1,
+                        }}>
+                        <EditOutlinedIcon sx={{ fontSize: 15, }} />
+                      </IconButton>
+                      <IconButton
+                        disabled={!config.btnDelete}
+                        onClick={(e) => {
+                          console.log(e.currentTarget.id);
+                          setId(e.currentTarget.id);
+                          setDialog(true);
+                        }}
+                        id={item._id}
+                        sx={{
+                          width: 40,
+                          height: 40,
+                          backgroundColor: 'rgb(255,19,0)',
+                          color: 'white'
+                        }}>
+                        <DeleteOutlineOutlinedIcon sx={{ fontSize: 15, }} />
+                      </IconButton>
+                    </Box>
                   </TableCell>
-                ))}
-                <TableCell>
-                  <Box display={'flex'}>
-                    <IconButton
-                      disabled={!config.btnEdit}
-                      onClick={handleEdit}
-                      id={item._id}
-                      sx={{
-                        width: 40,
-                        height: 40,
-                        backgroundColor: 'rgb(47,223,132)',
-                        color: 'white',
-                        marginInline: 1,
-                      }}>
-                      <EditOutlinedIcon sx={{ fontSize: 15, }} />
-                    </IconButton>
-                    <IconButton
-                      disabled={!config.btnDelete}
-                      sx={{
-                        width: 40,
-                        height: 40,
-                        backgroundColor: 'rgb(255,19,0)',
-                        color: 'white'
-                      }}>
-                      <DeleteOutlineOutlinedIcon sx={{ fontSize: 15, }} />
-                    </IconButton>
-                  </Box>
-                </TableCell>
-              </TableRow>
-            ))}
+                </TableRow>
+              )
+            })}
           </TableBody>
         </Table>
       </TableContainer>
@@ -148,6 +163,55 @@ function CustomTable(props) {
         rowsPerPage={rowsPerPage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+      <Dialog
+        open={dialog}
+        onClose={() => {
+          setDialog(false);
+        }} >
+        <Box sx={{
+          width: 500,
+          backgroundColor: 'white',
+          padding: 5
+        }}>
+          <Typography
+            fontFamily={'Roboto Slab'}
+            fontSize={20}
+            textAlign={'center'}
+            textTransform={'uppercase'}
+            paddingBottom={5}
+            paragraph>
+            Bạn có chắc chắn muốn xóa trường này ?
+          </Typography>
+          <Typography textAlign={'center'}>
+            <ErrorOutlineIcon sx={{
+              color: 'red',
+              fontSize: 200
+            }} />
+          </Typography>
+          <Box sx={{
+            width: '100%',
+            display: 'flex',
+            paddingInline: '20%',
+            justifyContent: 'space-around',
+            marginTop: 5,
+          }}>
+            <Button
+              onClick={handleSubmit}
+              sx={{
+                paddingInline: 4,
+                backgroundColor: 'rgba(1,227,167,1)',
+                color: 'white'
+              }}>Yes</Button>
+            <Button
+              onClick={() => { setDialog(false) }}
+              sx={{
+                backgroundColor: 'rgba(40,0,128,1)',
+                paddingInline: 3,
+                color: 'white'
+              }}>Cancel</Button>
+          </Box>
+        </Box>
+      </Dialog>
     </>
   )
 }
