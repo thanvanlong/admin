@@ -82,16 +82,18 @@ export const configOrderPending = (data) =>{
     const createdat = data?.createdAt;
     let food = '';
     data?.dishes.map((item) =>{
-        food = food + item.name + '\n' ;
+        const name = item?.name.length > 11 ? item?.name.slice(0,10) +'...' : item?.name;
+        food = food + name + "\n" ;
     })
-    console.log(food);
     let quantity = '';
     data?.quantity.map((item) =>{
-        quantity = quantity + item + '\n';
+        quantity = quantity + item + "\n";
     })
-    let total ;
+    let total = 0 ;
     data?.dishes.map((item, index) =>{
-        total += data?.quantity.indexOf(index) * item.price;
+        total += (data?.quantity[index]) * item.price;
     });
-    console.log(total);
+    const timedelivery = data?.timeDelivery;
+    return {...data, total, food, quantity, createdat, timedelivery};
+    
 }

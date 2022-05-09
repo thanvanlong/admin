@@ -23,9 +23,13 @@ function CustomTable(props) {
   // const [tmp, setTmp] = useState(useSelector(state => state));
 
   const temp = useSelector(state => state);
+  console.log(temp);
   const rows = temp['list' + (type + '').charAt(0).toLocaleUpperCase() + type.slice(1)];
-  const t = rows.slice(rowsPerPage * page, rowsPerPage * (page + 1));
-  const [data, setData] = useState(t);
+  let t = [];
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    setData(rows.slice(rowsPerPage * page, rowsPerPage * (page + 1)))
+  }, [rows])
   const navigate = useNavigate();
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -100,7 +104,7 @@ function CustomTable(props) {
             </TableRow>
           </TableHead>
           <TableBody sx={{ overflowY: 'auto' }}>
-            {tmp.map((item, index) => {
+            {data.map((item, index) => {
               return (
                 <TableRow
                   key={index}
@@ -110,8 +114,13 @@ function CustomTable(props) {
                   <TableCell>{index + 1}</TableCell>
                   {fieldName.map((it, index) => (
                     <TableCell key={index} onClick={handleEdit} id={item._id}>
-                      <Typography fontFamily={'Roboto Slab'} fontWeight={900} >
-                        {configString(item[(it + '').toLocaleLowerCase()])}
+                      <Typography
+                        fontFamily={'Roboto Slab'}
+                        fontWeight={900}
+                        whiteSpace='pre-wrap' >
+                        {type === 'orders' ?
+                          configString(configOrderPending(item)[(it + '').toLocaleLowerCase()]) :
+                          configString(item[(it + '').toLocaleLowerCase()])}
                       </Typography>
                     </TableCell>
                   ))}

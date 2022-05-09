@@ -50,11 +50,11 @@ function ManagePage() {
     }
     const handleSearch = () => {
         const newData = tmp.current.filter(
-            item => (item.username + '').toLocaleLowerCase().includes(dataSearch.name) &&
-                (item._id + '').toLocaleLowerCase().includes(dataSearch.id) &&
-                (item.role + '').toLocaleLowerCase().includes(dataSearch.role)
+            item => (item.username + '').toLocaleLowerCase().includes(dataSearch.name.toLocaleLowerCase()) &&
+                (item._id + '').toLocaleLowerCase().includes(dataSearch.id.toLocaleLowerCase()) &&
+                (item.role + '').toLocaleLowerCase().includes(dataSearch.role.toLocaleLowerCase())
         );
-        console.log(newData);
+        dispatch(setUser(newData));
     }
     useEffect(() => {
         callAPI();

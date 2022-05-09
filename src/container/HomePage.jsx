@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { Bar, Line } from 'react-chartjs-2'
 import {
     Chart as ChartJS,
@@ -11,7 +11,7 @@ import {
     Legend,
     LineElement,
 } from 'chart.js';
-import { Box, Card, Container, Typography, Button } from '@mui/material';
+import { Box, Card, Backdrop, CircularProgress, Typography, Snackbar } from '@mui/material';
 import CardContent from '../components/CardContent';
 import { content } from '../utils/fakeData';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,7 +20,8 @@ import { fieldName } from '../config/table.config'
 import { editable } from '../config/attr-config-editable.config'
 import { over } from 'stompjs'
 import SockJS from 'sockjs-client'
-import { setOrderPending } from '../store/Module.action';
+import { setCountNotifi, setOrderPending } from '../store/Module.action';
+import AdmniContainer from '../service/AdminContainer.service';
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -62,26 +63,42 @@ function HomePage() {
                 borderColor: 'rgba(1,227,167,1)',
                 backgroundColor: 'rgba(1,227,167,1)',
             },
-            {
-                label: 'Năm 2022',
-                data: data2,
-                borderColor: 'rgba(40,0,128,1)',
-                backgroundColor: 'rgba(40,0,128,1)',
-            },
+            // {
+            //     label: 'Năm 2022',
+            //     data: data2,
+            //     borderColor: 'rgba(40,0,128,1)',
+            //     backgroundColor: 'rgba(40,0,128,1)',
+            // },
         ]
     }
     const dispatch = useDispatch();
+    const service = new AdmniContainer();
+    const listOrders = useRef([]);
+    const [backDrop, setBackDrop] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
+    const callAPI = useCallback(async () => {
+        setBackDrop(true);
+        await service.get('/orders/status/Pending')
+            .then(res => {
+                listOrders.current = res.data;
+                dispatch(setOrderPending(res.data))
+            })
+        setBackDrop(false);
+    }, []);
     useEffect(() => {
         const sockjs = new SockJS('https://wsocketlong.herokuapp.com/websocket')
         let stompjs = over(sockjs);
         stompjs.connect({}, () => {
             stompjs.subscribe('/user/3/private', (payload) => {
-                const data = JSON.parse(payload.body)
-                dispatch(setOrderPending(data));
+                const data = JSON.parse(payload.body);
+                setOpen(true)
+                dispatch(setOrderPending([data, ...listOrders.current]));
+                dispatch(setCountNotifi())
             })
         }, (e) => {
             console.log(e);
         });
+        callAPI();
     }, []);
     return (
         <>
@@ -163,6 +180,19 @@ function HomePage() {
                     config={editable}
                     fieldName={fieldName.order}
                     type={'orders'} />
+                <Snackbar
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                    open={open}
+                    onClose={() => { setOpen(false) }}
+                    message="Có một đơn mới kìa!! Check ngay thôi"
+                // key={vertical + horizontal}
+                />
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: 100 }}
+                    open={backDrop}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
             </Card>
         </>
     )

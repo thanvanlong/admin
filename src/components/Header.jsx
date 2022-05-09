@@ -1,5 +1,5 @@
-import React from 'react'
-import { Card, Box, InputBase, TextField, Menu, MenuItem, IconButton, Badge } from '@mui/material'
+import React, { useState } from 'react'
+import { Card, Box, InputBase, TextField, Menu, MenuItem, IconButton, Badge, Typography } from '@mui/material'
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -7,17 +7,30 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCountNotifi } from '../store/Module.action';
 function Header() {
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEls, setAnchorEls] = React.useState(null);
     const isMenuOpen = Boolean(anchorEl);
+    const isNotifiOpen = Boolean(anchorEls);
     const menuId = 'primary-search-account-menu';
-
+    const count = useSelector(state => state?.countNotifi);
+    const listOrders = useSelector(state => state?.listOrders);
+    const dispatch = useDispatch();
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
+    };
+    const handleProfileNotifiOpen = (event) => {
+        setAnchorEls(event.currentTarget);
+        dispatch(setCountNotifi(0));
     };
 
     const handleMenuClose = () => {
         setAnchorEl(null);
+    };
+    const handleNotifiClose = () => {
+        setAnchorEls(null);
     };
 
     const renderMenu = (
@@ -38,6 +51,29 @@ function Header() {
                 <LoginOutlinedIcon sx={{ marginRight: 2 }} />Logout
             </MenuItem>
         </Menu>
+    );
+    const notifiId = 'notifiId';
+    const renderNotifi = (
+        <>
+
+            <Menu
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                id={notifiId}
+                keepMounted
+                open={isNotifiOpen}
+                onClose={handleNotifiClose}
+            >
+                {listOrders.slice(0, 3).map((item, index) => (
+                    <MenuItem onClick={handleNotifiClose} sx={{ fontFamily: 'Roboto Slab' }}>
+                        {item.name} vua dat mot don moi
+                    </MenuItem>
+                ))}
+            </Menu>
+        </>
     );
 
     return (
@@ -96,8 +132,10 @@ function Header() {
                         size="large"
                         aria-label="show 17 new notifications"
                         color="inherit"
+                        aria-controls={notifiId}
+                        onClick={handleProfileNotifiOpen}
                     >
-                        <Badge badgeContent={17} color="error">
+                        <Badge badgeContent={count} color="error">
                             <NotificationsIcon />
                         </Badge>
                     </IconButton>
@@ -112,6 +150,7 @@ function Header() {
                 </Box>
             </Box>
             {renderMenu}
+            {renderNotifi}
         </>
     )
 }
