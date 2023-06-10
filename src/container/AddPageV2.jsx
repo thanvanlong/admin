@@ -263,6 +263,8 @@ function AddPageV2() {
                 {...getRootProps({ className: "dropzone" })}
               >
                 <input
+                  type={'file'}
+                  accept={"image/*"}
                   hidden
                   {...getRootProps({ className: "dropzone" })}
                   required
