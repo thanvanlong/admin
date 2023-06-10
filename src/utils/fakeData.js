@@ -14,8 +14,8 @@ export const nav = [
     },
     {
         id: 2,
-        name: 'Nhân viên',
-        url: '/manage/users',
+        name: 'Thêm sách',
+        url: '/add/book',
         icon: <EngineeringOutlinedIcon />
     },
     {
@@ -47,17 +47,17 @@ export const nav = [
 
 export const content = [
     {
-        name: 'Nhân viên',
+        name: 'Sách',
         img: '../../img/enginee.png',
         quantity: 2000,
     },
     {
-        name: 'Món ăn',
+        name: 'Nhân viên',
         img: '../../img/cooking.png',
         quantity: 2000,
     },
     {
-        name: 'Bàn ăn',
+        name: 'Người dùng',
         img: '../../img/table.png',
         quantity: 2000,
     },

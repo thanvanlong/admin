@@ -7,74 +7,78 @@ export const configString = (data) => {
     return rs;
 }
 
+export const configFieldName = (data) => {
+    data = data.replace(/\s/g, '');
+    const rs = (data + '').charAt(0).toLocaleLowerCase() + (data + '').slice(1);
+    return rs;
+}
+
+export const configCategories = (data) => {
+    let rs = '';
+    // data.map(item => {
+    //     console.log(item.title);
+    //     rs += '[' + item.title + ']' + ','
+    // }) 
+    return data?.title;
+}
+
+export const isImage = (data) => {
+    console.log(data);
+    return (data + "").includes("https://") || (data + "").includes("http://");
+}
+
 export const roleConfig = {
     users: ['client', 'waiter', 'admin', 'chef'],
 }
 
 export const configField = {
     users: {
-        gender: {
-            type: 'select',
-            data: ['male', 'female'],
-            visiable: true,
-            create: true,
+        id: {
+            type: 'text',
+            visiable: false,
+            create: false,
         },
-        role: {
-            type: 'select',
-            data: Object.values(roleConfig?.users),
-            visiable: true,
-            create: true,
-        },
-        address: {
+        name: {
             type: 'text',
             visiable: true,
             create: true,
         },
-        isActive: {
-            type: 'select',
-            data: ['true', 'false'],
-            visiable: true,
-            create: false,
-        },
-        isLock: {
-            type: 'select',
-            data: ['true', 'false'],
-            visiable: true,
-            create: false,
-        },
-        username: {
+        species: {
             type: 'text',
             visiable: true,
             create: true,
         },
-        email: {
-            type: 'email',
-            visiable: false,
+        age: {
+            type: 'number',
+            visiable: true,
             create: true,
         },
-        password: {
-            type: 'password',
-            visiable: false,
+        neutered: {
+            type: 'text',
+            visiable: true,
             create: true,
-        },
-        phone: {
-            type: 'phone',
-            visiable: false,
-            create: true,
-        },
-        createdAt: {
-            type: 'date',
-            visiable: false,
-        },
-        updatedAt: {
-            type: 'date',
-            visiable: false,
         }
+        // description: {
+        //     type: 'text',
+        //     visiable: true,
+        //     create: true,
+        // },
+        // publishedDate: {
+        //     type: 'date',
+        //     visiable: true,
+        //     // create: true
+        // },
+        // category: {
+        //     type: 'text',
+        //     visiable: true,
+        //     create: true
+        // }
     }
 }
 
 export const configDate = (data) =>{
-    const tmpDate = (data +'').split('T');
+    const tmpDate = ("2022-10-31T23:32:18" +'').split('T');
+    console.log(tmpDate[0]);
     return tmpDate[0];
 }
 

@@ -5,6 +5,7 @@ import {nav} from '../utils/fakeData'
 function NavChild() {
     const location = useLocation();
     const tmpUrl = '/'+location.pathname.split('/')[1];
+    console.log(tmpUrl)
     const url = tmpUrl === '/edit' ? tmpUrl : location.pathname;
     const data = nav.filter(item => item.url === url);
     return (

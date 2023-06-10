@@ -1,18 +1,33 @@
-import { Box, Button, Card, Backdrop, Typography, Dialog } from '@mui/material'
+import {Box, Button, Card, Backdrop, Typography, Dialog, IconButton} from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress';
 import React, { useEffect, useState, useCallback } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
 import DefaultInput from '../components/DefaultInput'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { configField, configString, configDate } from '../config/admin.config'
-import AdmniContainer from '../service/AdminContainer.service'
+import AdminContainer from '../service/AdminContainer.service'
+import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { useDropzone } from "react-dropzone";
 
 function AddPage() {
+    const [imgPrev, setImgPrev] = useState();
+    const [files, setFiles] = useState();
+    const { getRootProps, getInputProps } = useDropzone({
+        accept: "image/*",
+        onDrop: (acceptedFiles) => {
+            const objectUrl = URL.createObjectURL(acceptedFiles[0]);
+            setFiles(acceptedFiles[0]);
+            setImgPrev(objectUrl);
+        },
+    });
     const param = useParams();
     const type = param['id'];
-    const obj = configField[type];
+    const obj = configField['users'];
+    console.log(obj);
     const field = Object.keys(obj).filter(key => obj[key].create === true);
-    const service = new AdmniContainer();
+    console.log(field);
+    const service = new AdminContainer();
     const [dt, setDt] = useState({});
     const [dialog, setDialog] = useState(false);
 
@@ -42,13 +57,16 @@ function AddPage() {
     const handleChange = (e) => {
         const name = e.target.name ? e.target.name : e.target.id;
         const value = e.target.value;
-        setDt({ ...dt, [name]: value });
+        if (name === "category") {
+            setDt({ ...dt, [name]: {...dt[name],['title']: value} });
+        } else {
+            setDt({ ...dt, [name]: value });
+        }
     };
     const handleSubmit = async () => {
         console.log(dt);
         setOpen(true);
-        const rs = await service.create(type, dt);
-        console.log(rs);
+        const rs = await service.create("save", dt);
         setOpen(false)
         setDialog(true);
     }
@@ -65,7 +83,8 @@ function AddPage() {
 
         }}>
             {field.map((item, index) => {
-                const typeConfig = configField[type];
+                const typeConfig = configField["users"];
+                console.log(item);
                 const tmp = typeConfig[item];
                 return (
                     <DefaultInput
@@ -80,6 +99,76 @@ function AddPage() {
                     />
                 )
             })}
+            <Box
+                sx={{
+                    width: "28%",
+                    borderStyle: "dashed",
+                    borderRadius: 5,
+                    borderColor: "#3333",
+                    padding: 5,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginLeft: 6,
+                }}
+            >
+                {true ? (
+                    <Box
+                        sx={{
+                            width: "100%",
+                            position: "relative",
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                borderRadius: 3,
+                                overflow: "hidden",
+                                width: "100%",
+                                maxHeight: 250,
+                                marginRight: 3,
+                            }}
+                        >
+                            <img
+                                width={"100%"}
+                                src={"imgPrev"}
+                                alt={"img"}
+                                style={{ objectFit: "cover", objectPosition: "center" }}
+                            />
+                        </Box>
+
+                        <IconButton
+                            sx={{
+                                width: "15%",
+                                position: "absolute",
+                                top: -15,
+                                right: -15,
+                            }}
+                            onClick={() => {
+                                // setImgPrev();
+                            }}
+                        >
+                            {localStorage.getItem("USER") ? (
+                                <HighlightOffOutlinedIcon sx={{ color: "black" }} />
+                            ) : (
+                                <></>
+                            )}
+                        </IconButton>
+                    </Box>
+                ) : (
+                    <IconButton
+                        variant="outline"
+                        sx={{ width: "100%", height: "100%", padding: 10 }}
+                        {...getRootProps({ className: "dropzone" })}
+                    >
+                        <input
+                            hidden
+                            {...getRootProps({ className: "dropzone" })}
+                            required
+                        />
+                        <CloudUploadIcon sx={{ width: "100%", height: "100%" }} />
+                    </IconButton>
+                )}
+            </Box>
             <Box sx={{
                 width: '100%',
                 display: 'flex',

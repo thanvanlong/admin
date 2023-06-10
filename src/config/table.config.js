@@ -1,7 +1,7 @@
 export const fieldName = {
-    engineer: ['Username', 'Role', 'Gender', 'Address', 'Phone', 'Email'],
+    book: ['Id','Name', 'Author', 'Company', 'Img Url', "Page Count", "Published Date"],
     food: [],
     table: [],
     evnet: [],
-    order: ['Food', 'Quantity', 'Name', 'Address', 'Phone', 'CreatedAt', 'TimeDelivery', 'Total'],
+    music: ['Title', 'Genre', 'Artist', 'Release Date', 'Duration', 'Album'],
 }

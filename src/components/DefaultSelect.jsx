@@ -3,6 +3,7 @@ import { FormControl, InputLabel, Select, MenuItem, Container, Typography } from
 function DefaultSelect(props) {
     const { dt, label, name, handleChange: onChange } = props;
     const [data, setData] = React.useState();
+    console.log("..............");
     const handleChange = (e) => {
         onChange(e)
         setData(e.target.value);
