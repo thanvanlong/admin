@@ -47,7 +47,7 @@ class AdminContainer extends Component {
   }
 
   async delete(url, data) {
-    const rs = await axios.delete(this.apiUrl + url, {data: data});
+    const rs = await this.axiosJwt.delete(this.apiUrl + url, {data: data});
     return rs;
   }
 
