@@ -92,7 +92,7 @@ function AddPageV2() {
     }
     setOpen(true);
     console.log(param)
-    if (param["id"] && param['id'] == 'book') {
+    if (param["id"] && param['id'] != 'book') {
       var formData = new FormData();
       if (files) {
         formData.append("image", files);
