@@ -1,41 +1,15 @@
 import React, { useCallback, useEffect, useRef } from 'react'
-import { Bar, Line } from 'react-chartjs-2'
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    PointElement,
-    Title,
-    Tooltip,
-    Legend,
-    LineElement,
-} from 'chart.js';
 import {Box, Card, Backdrop, CircularProgress, Typography, Snackbar, IconButton, Button} from '@mui/material';
-import CardContent from '../components/CardContent';
-import { content } from '../utils/fakeData';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomTable from '../components/CustomTable';
 import { fieldName } from '../config/table.config'
 import { editable } from '../config/attr-config-editable.config'
-import { over } from 'stompjs'
-import SockJS from 'sockjs-client'
 import { setCountNotifi, setOrderPending } from '../store/Module.action';
 import AdmniContainer from '../service/AdminContainer.service';
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import GridViewIcon from "@mui/icons-material/GridView";
 import AddIcon from "@mui/icons-material/Add";
 import {useNavigate} from "react-router-dom";
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-);
 function HomePage() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
