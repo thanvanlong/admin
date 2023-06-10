@@ -33,7 +33,7 @@ export default function SignIn() {
       phone: data.get("email"),
       password: data.get("password"),
     };
-    axios.post("http://192.168.1.8:8081/api/v1/auth/login", user).then((res) => {
+    axios.post("http://14.225.205.30:8081/api/v1/auth/login", user).then((res) => {
       console.log(res);
       if (res.data.errorCode == "200") {
         localStorage.setItem("USER", res.data.data.accessToken);
