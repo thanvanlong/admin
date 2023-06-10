@@ -91,7 +91,8 @@ function AddPageV2() {
       return;
     }
     setOpen(true);
-    if (param["id"]) {
+    console.log(param)
+    if (param["id"] && param['id'] == 'book') {
       var formData = new FormData();
       if (files) {
         formData.append("image", files);
