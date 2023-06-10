@@ -14,7 +14,7 @@ export const nav = [
     },
     {
         id: 2,
-        name: 'Thêm sách',
+        name: 'Thêm bài hát',
         url: '/add/book',
         icon: <EngineeringOutlinedIcon />
     },
