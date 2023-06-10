@@ -4,7 +4,7 @@ import jwt_decode from 'jwt-decode'
 class AdminContainer extends Component {
   constructor() {
     super();
-    const url = "http://192.168.1.8:8081/api/v1/";
+    const url = "http://14.225.205.30:8081/api/v1/";
     this.apiUrl = url;
     this.axiosJwt = axios.create();
     this.axiosJwt.interceptors.request.use(

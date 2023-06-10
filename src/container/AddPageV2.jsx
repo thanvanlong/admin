@@ -105,7 +105,7 @@ function AddPageV2() {
         }
       })
       axios
-          .put("http://192.168.1.8:8081/api/v1/music/" + dt.id, formData, {
+          .put("http://14.225.205.30:8081/api/v1/music/" + dt.id, formData, {
             headers: {
               Accept: "application/json ,text/plain, */*",
               "Content-Type": "multipart/form-data",
@@ -129,7 +129,7 @@ function AddPageV2() {
         }
       })
       axios
-        .post("http://192.168.1.8:8081/api/v1/music", formData, {
+        .post("http://14.225.205.30:8081/api/v1/music", formData, {
           headers: {
             Accept: "application/json ,text/plain, */*",
             "Content-Type": "multipart/form-data",
